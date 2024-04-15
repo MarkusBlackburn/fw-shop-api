@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\fw-shop-api.props" />
+</Project>

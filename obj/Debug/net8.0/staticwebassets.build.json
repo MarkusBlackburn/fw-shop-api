@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "059LpdTWtYQdzTErRBTYJp58fjdYE555w8hbBQFRI9w=",
+  "Source": "fw-shop-api",
+  "BasePath": "_content/fw-shop-api",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
