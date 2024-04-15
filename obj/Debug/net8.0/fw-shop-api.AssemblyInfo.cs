@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("fw-shop-api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+16b507182d94a580b3307bc859664f9817038eba")]
 [assembly: System.Reflection.AssemblyProductAttribute("fw-shop-api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("fw-shop-api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
