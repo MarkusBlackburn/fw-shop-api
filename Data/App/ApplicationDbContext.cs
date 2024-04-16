@@ -11,5 +11,6 @@ namespace fw_shop_api.Data.App
         }
 
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Product> Products { get; set; }
     }
 }

@@ -1,4 +1,6 @@
 using fw_shop_api.Data.App;
+using fw_shop_api.Data.Implementations;
+using fw_shop_api.Data.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +17,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnectionString"));
     }
 );
+
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+//sbuilder.Services.AddScoped<IGoogleAuthService, GoogleAuthService>();
 
 var app = builder.Build();
 
