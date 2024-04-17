@@ -7,7 +7,7 @@ namespace fw_shop_api.Data.App
 {
     public class AuthDbContext : IdentityDbContext<User, Role, long, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>
     {
-        public AuthDbContext(DbContextOptions options) : base(options) {}
+        public AuthDbContext(DbContextOptions<AuthDbContext> options) : base(options) {}
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

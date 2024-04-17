@@ -49,14 +49,14 @@ namespace fw_shop_api.Data.Implementations
 
         private string CreateJwtToken(User user)
         {
-            var key = Encoding.ASCII.GetBytes(_jwt.Secret);
+            var key = Encoding.ASCII.GetBytes(_jwt.Value.Secret);
             var userClaims = BuildUserClaims(user);
             var signKey = new SymmetricSecurityKey(key);
             var jwtSecurityToken = new JwtSecurityToken(
-                issuer: _jwt.ValidIssuer,
+                issuer: _jwt.Value.ValidIssuer,
                 notBefore: DateTime.UtcNow,
-                audience: _jwt.ValidAudience,
-                expires: DateTime.UtcNow.AddMinutes(Convert.ToInt32(_jwt.DurationInMinutes)),
+                audience: _jwt.Value.ValidAudience,
+                expires: DateTime.UtcNow.AddMinutes(Convert.ToInt32(_jwt.Value.DurationInMinutes)),
                 claims: userClaims,
                 signingCredentials: new SigningCredentials(signKey, SecurityAlgorithms.HmacSha256));
             

@@ -29,13 +29,12 @@ namespace fw_shop_api.Data.Implementations
         }
         public async Task<BaseResponse<User>> GoogleSignIn(GoogleSignInVM model)
         {
-            Payload payload= new();
-
+            var googleUser = new Payload();
             try
             {
-                payload = await ValidateAsync(model.IdToken, new ValidationSettings
+                googleUser = await ValidateAsync(model.IdToken, new ValidationSettings
                 {
-                    Audience = new[] { _config.ClientId }
+                    Audience = [_config.ClientId]
                 });
             }
             catch (Exception ex)
@@ -45,11 +44,11 @@ namespace fw_shop_api.Data.Implementations
 
             var userCreated = new CreateUserFromSocialDto
             {
-                FirstName = payload.GivenName,
-                LastName = payload.FamilyName,
-                Email = payload.Email,
-                ProfilePicture = payload.Picture,
-                LoginProviderSubject = payload.Subject
+                FirstName = googleUser.GivenName,
+                LastName = googleUser.FamilyName,
+                Email = googleUser.Email,
+                ProfilePicture = googleUser.Picture,
+                LoginProviderSubject = googleUser.Subject
             };
 
             var user = await _userManager.CreateUserFromSocial(_context, userCreated, LoginProvider.Google);
