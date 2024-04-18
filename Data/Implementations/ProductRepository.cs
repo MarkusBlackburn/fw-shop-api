@@ -1,6 +1,7 @@
 using fw_shop_api.Data.App;
 using fw_shop_api.Data.Interfaces;
 using fw_shop_api.Models.Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace fw_shop_api.Data.Implementations
 {
@@ -18,6 +19,11 @@ namespace fw_shop_api.Data.Implementations
             await _dbContext.SaveChangesAsync();
 
             return product;
+        }
+
+        public async Task<IEnumerable<Product>> GetAllProducts()
+        {
+            return await _dbContext.Products.Include(c => c.Categories).ToListAsync();
         }
     }
 }

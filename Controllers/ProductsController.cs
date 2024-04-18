@@ -61,5 +61,35 @@ namespace fw_shop_api.Controllers
 
             return Ok(response);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllProducts()
+        {
+            var products = await _productRepository.GetAllProducts();
+
+            var response = new List<ProductDto>();
+            foreach (var product in products)
+            {
+                response.Add(new ProductDto
+                {
+                    Id = product.Id,
+                    Name = product.Name,
+                    ShortDescription = product.ShortDescription,
+                    Content = product.Content,
+                    Price = product.Price,
+                    Amount = product.Amount,
+                    IsAvailable = product.IsAvailable,
+                    Url = product.UrlHandle,
+                    Categories = product.Categories!.Select(c => new CategoryDto
+                    {
+                        Id = c.Id,
+                        Name = c.Name,
+                        Url = c.UrlHandle
+                    }).ToList()
+                });
+            }
+
+            return Ok(response);
+        }
     }
 }
