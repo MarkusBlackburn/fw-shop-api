@@ -91,5 +91,89 @@ namespace fw_shop_api.Controllers
 
             return Ok(response);
         }
+
+        [HttpGet]
+        [Route("{id:int}")]
+        public async Task<IActionResult> GetProductById([FromRoute] int id)
+        {
+            var product = await _productRepository.GetProductById(id);
+            if (product is null) return NotFound("Product doesn't exist");
+
+            var response = new ProductDto
+            {
+                Id = product.Id,
+                Name = product.Name,
+                ShortDescription = product.ShortDescription,
+                Content = product.Content,
+                Price = product.Price,
+                Amount = product.Amount,
+                IsAvailable = product.IsAvailable,
+                Url = product.UrlHandle,
+                Categories = product.Categories?.Select(c => new CategoryDto
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    Url = c.UrlHandle
+                }).ToList()
+            };
+
+            return Ok(response);
+        }
+
+        [HttpGet]
+        [Route("{url}")]
+        public async Task<IActionResult> GetProductByUrl([FromRoute] string url)
+        {
+            var product = await _productRepository.GetProductByUrl(url);
+            if (product is null) return NotFound("Product doesn't exist");
+
+            var response = new ProductDto
+            {
+                Id = product.Id,
+                Name = product.Name,
+                ShortDescription = product.ShortDescription,
+                Content = product.Content,
+                Price = product.Price,
+                Amount = product.Amount,
+                IsAvailable = product.IsAvailable,
+                Url = product.UrlHandle,
+                Categories = product.Categories?.Select(c => new CategoryDto
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    Url = c.UrlHandle
+                }).ToList()
+            };
+
+            return Ok(response);
+        }
+
+        [HttpGet]
+        [Route("{id:guid}")]
+        public async Task<IActionResult> GetProductsByCategoryId([FromRoute] Guid id)
+        {
+            var category = await _productRepository.GetProductsByCategoryId(id);
+            if (category is null) return NotFound("Category doesn't exist");
+
+            var response = new CategoryDto
+            {
+                Id = category.Id,
+                Name = category.Name,
+                Url = category.UrlHandle,
+                Products = category.Products?.Select(c => new ProductDto
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    ShortDescription = c.ShortDescription,
+                    Content = c.Content,
+                    Price = c.Price,
+                    Amount = c.Amount,
+                    IsAvailable = c.IsAvailable,
+                    Url = c.UrlHandle
+                }).ToList()
+            };
+
+            return Ok(response);
+        }
     }
 }

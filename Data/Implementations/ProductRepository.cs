@@ -25,5 +25,20 @@ namespace fw_shop_api.Data.Implementations
         {
             return await _dbContext.Products.Include(c => c.Categories).ToListAsync();
         }
+
+        public async Task<Product?> GetProductById(int id)
+        {
+            return await _dbContext.Products.Include(c => c.Categories).FirstOrDefaultAsync(c => c.Id == id);
+        }
+
+        public async Task<Product?> GetProductByUrl(string url)
+        {
+            return await _dbContext.Products.Include(c => c.Categories).FirstOrDefaultAsync(c => c.UrlHandle == url);
+        }
+
+        public async Task<Category?> GetProductsByCategoryId(Guid id)
+        {
+            return await _dbContext.Categories.Include(c => c.Products).FirstOrDefaultAsync(c => c.Id == id);
+        }
     }
 }

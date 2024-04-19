@@ -6,5 +6,8 @@ namespace fw_shop_api.Data.Interfaces
     {
         Task<Product> CreateNewProduct(Product product);
         Task<IEnumerable<Product>> GetAllProducts();
+        Task<Product?> GetProductById(int id);
+        Task<Product?> GetProductByUrl(string url);
+        Task<Category?> GetProductsByCategoryId(Guid id);
     }
 }
