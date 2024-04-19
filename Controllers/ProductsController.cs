@@ -175,5 +175,73 @@ namespace fw_shop_api.Controllers
 
             return Ok(response);
         }
+
+        [HttpPut]
+        [Route("{id:int}")]
+        public async Task<IActionResult> UpdateProductById([FromRoute] int id,UpdateProductRequestDto request)
+        {
+            var product = new Product
+            {
+                Id = id,
+                Name = request.Name,
+                ShortDescription = request.ShortDescription,
+                Content = request.Content,
+                Price = request.Price,
+                Amount = request.Amount,
+                IsAvailable = request.IsAvailable,
+                UrlHandle = request.Url,
+                Categories = []
+            };
+
+            foreach(var categoryUrl in request.Categories)
+            {
+                var exCategory = await _categoryRepository.GetCategoryByUrl(categoryUrl);
+                if (exCategory is not null) product.Categories.Add(exCategory);
+            }
+
+            var updatedProduct = await _productRepository.UpdateProductById(product);
+            if (updatedProduct is null) return NotFound ("Product doesn't exist");
+
+            var response = new ProductDto
+            {
+                Id = product.Id,
+                Name = product.Name,
+                ShortDescription = product.ShortDescription,
+                Content = product.Content,
+                Price = product.Price,
+                Amount = product.Amount,
+                IsAvailable = product.IsAvailable,
+                Url = product.UrlHandle,
+                Categories = product.Categories!.Select(c => new CategoryDto{
+                    Id = c.Id,
+                    Name = c.Name,
+                    Url = c.UrlHandle
+                }).ToList()
+            };
+
+            return Ok(response);
+        }
+
+        [HttpDelete]
+        [Route("{id:int}")]
+        public async Task<IActionResult> DeleteProductById([FromRoute] int id)
+        {
+            var product = await _productRepository.DeleteProductById(id);
+            if (product is null) return NotFound("Product doesn't exist");
+
+            var response = new ProductDto
+            {
+                Id = product.Id,
+                Name = product.Name,
+                ShortDescription = product.ShortDescription,
+                Content = product.Content,
+                Price = product.Price,
+                Amount = product.Amount,
+                IsAvailable = product.IsAvailable,
+                Url = product.UrlHandle
+            };
+
+            return Ok(response);
+        }
     }
 }

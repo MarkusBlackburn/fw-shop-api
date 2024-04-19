@@ -40,5 +40,29 @@ namespace fw_shop_api.Data.Implementations
         {
             return await _dbContext.Categories.Include(c => c.Products).FirstOrDefaultAsync(c => c.Id == id);
         }
+
+        public async Task<Product?> UpdateProductById(Product product)
+        {
+            var exProduct = await _dbContext.Products.Include(c => c.Categories).FirstOrDefaultAsync(c => c.Id == product.Id);
+            if (exProduct is null) return null;
+
+            _dbContext.Entry(exProduct).CurrentValues.SetValues(product);
+            exProduct.Categories = product.Categories;
+
+            await _dbContext.SaveChangesAsync();
+
+            return product;
+        }
+
+        public async Task<Product?> DeleteProductById(int id)
+        {
+            var exProduct = await _dbContext.Products.FirstOrDefaultAsync(c => c.Id == id);
+            if (exProduct is null) return null;
+
+            _dbContext.Products.Remove(exProduct);
+            await _dbContext.SaveChangesAsync();
+
+            return exProduct;
+        }
     }
 }

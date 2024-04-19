@@ -9,5 +9,7 @@ namespace fw_shop_api.Data.Interfaces
         Task<Product?> GetProductById(int id);
         Task<Product?> GetProductByUrl(string url);
         Task<Category?> GetProductsByCategoryId(Guid id);
+        Task<Product?> UpdateProductById(Product product);
+        Task<Product?> DeleteProductById(int id);
     }
 }
