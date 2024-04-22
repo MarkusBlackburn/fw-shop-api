@@ -124,9 +124,8 @@ namespace fw_shop_api.Controllers
             return Ok(response);
         }
 
-        [HttpGet]
-        [Route("{url}")]
-        public async Task<IActionResult> GetProductByUrl([FromRoute] string url)
+        [HttpGet("byUrl/{url}")]
+        public async Task<IActionResult> GetProductByUrl(string url)
         {
             var product = await _productRepository.GetProductByUrl(url);
             if (product is null) return NotFound("Product doesn't exist");
@@ -152,9 +151,8 @@ namespace fw_shop_api.Controllers
             return Ok(response);
         }
 
-        [HttpGet]
-        [Route("{id:guid}")]
-        public async Task<IActionResult> GetProductsByCategoryId([FromRoute] Guid id)
+        [HttpGet("ProductsByCategory/{id}")]
+        public async Task<IActionResult> GetProductsByCategoryId(Guid id)
         {
             var category = await _productRepository.GetProductsByCategoryId(id);
             if (category is null) return NotFound("Category doesn't exist");
