@@ -21,9 +21,33 @@ namespace fw_shop_api.Data.Implementations
             return product;
         }
 
-        public async Task<IEnumerable<Product>> GetAllProducts()
+        public async Task<IEnumerable<Product>> GetAllProducts(string? filterOn = null, string? filterQuery = null, string? sortBy = null, bool isAscending = true)
         {
-            return await _dbContext.Products.Include(c => c.Categories).ToListAsync();
+            //return await _dbContext.Products.Include(c => c.Categories).ToListAsync();
+            var products = _dbContext.Products.Include(c => c.Categories).AsQueryable();
+
+            if (string.IsNullOrWhiteSpace(filterOn) == false && string.IsNullOrWhiteSpace(filterQuery) == false)
+            {
+                if (filterOn.Equals("Name", StringComparison.OrdinalIgnoreCase))
+                {
+                    products = products.Where(x => x.Name.Contains(filterQuery) || x.ShortDescription.Contains(filterQuery) || x.Content.Contains(filterQuery));
+                }
+            }
+
+            if (string.IsNullOrWhiteSpace(sortBy) == false)
+            {
+                if (sortBy.Equals("Name", StringComparison.OrdinalIgnoreCase))
+                {
+                    products = isAscending ? products.OrderBy(x => x.Name) : products.OrderByDescending(x => x.Name);
+                }
+
+                else if (sortBy.Equals("Price", StringComparison.OrdinalIgnoreCase))
+                {
+                    products = isAscending ? products.OrderBy(x => x.Price) : products.OrderByDescending(x => x.Price);
+                }
+            }
+
+            return await products.ToListAsync();
         }
 
         public async Task<Product?> GetProductById(int id)
