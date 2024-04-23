@@ -67,9 +67,9 @@ namespace fw_shop_api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllProducts([FromQuery] string? filterOn, [FromQuery] string? filterQuery, [FromQuery] string? sortBy, [FromQuery] bool? isAscending)
+        public async Task<IActionResult> GetAllProducts([FromQuery] string? filterOn, [FromQuery] string? filterQuery, [FromQuery] string? sortBy, [FromQuery] bool? isAscending, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
-            var products = await _productRepository.GetAllProducts(filterOn, filterQuery, sortBy, isAscending ?? true);
+            var products = await _productRepository.GetAllProducts(filterOn, filterQuery, sortBy, isAscending ?? true, pageNumber, pageSize);
 
             var response = new List<ProductDto>();
             foreach (var product in products)

@@ -21,9 +21,8 @@ namespace fw_shop_api.Data.Implementations
             return product;
         }
 
-        public async Task<IEnumerable<Product>> GetAllProducts(string? filterOn = null, string? filterQuery = null, string? sortBy = null, bool isAscending = true)
+        public async Task<IEnumerable<Product>> GetAllProducts(string? filterOn = null, string? filterQuery = null, string? sortBy = null, bool isAscending = true, int pageNumber = 1, int pageSize = 10)
         {
-            //return await _dbContext.Products.Include(c => c.Categories).ToListAsync();
             var products = _dbContext.Products.Include(c => c.Categories).AsQueryable();
 
             if (string.IsNullOrWhiteSpace(filterOn) == false && string.IsNullOrWhiteSpace(filterQuery) == false)
@@ -47,7 +46,9 @@ namespace fw_shop_api.Data.Implementations
                 }
             }
 
-            return await products.ToListAsync();
+            var skip = (pageNumber - 1) * pageSize;
+
+            return await products.Skip(skip).Take(pageSize).ToListAsync();
         }
 
         public async Task<Product?> GetProductById(int id)
