@@ -15,13 +15,24 @@ namespace fw_shop_api.Controllers
         {
             _authService = authService;
         }
-        [HttpPost]
+        /*[HttpPost]
         [ProducesResponseType(typeof(BaseResponse<bool>), 200)]
         public async Task<IActionResult> GoogleSignIn(GoogleSignInVM model)
         {
             try
             {
                 return ReturnResponse(await _authService.SignInWithGoogle(model));
+            }
+            catch (Exception ex) { return HandleError(ex); }
+        }*/
+
+        [HttpPost]
+        [ProducesResponseType(typeof(BaseResponse<bool>), 200)]
+        public async Task<IActionResult> Register(AppRegisterVM model)
+        {
+            try
+            {
+                return ReturnResponse(await _authService.Registration(model));
             }
             catch (Exception ex) { return HandleError(ex); }
         }

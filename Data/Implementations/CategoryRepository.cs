@@ -29,7 +29,7 @@ namespace fw_shop_api.Data.Implementations
 
         public async Task<Category?> GetCategoryByUrl(string url)
         {
-            return await _dbContext.Categories.FirstOrDefaultAsync(c => c.UrlHandle == url);
+            return await _dbContext.Categories.Include(x => x.Products).FirstOrDefaultAsync(c => c.UrlHandle == url);
         }
 
         public async Task<Category?> UpdateCategoryById(Category category)

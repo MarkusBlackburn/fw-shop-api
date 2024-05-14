@@ -74,7 +74,18 @@ namespace fw_shop_api.Controllers
             {
                 Id = category.Id,
                 Name = category.Name,
-                Url = category.UrlHandle
+                Url = category.UrlHandle,
+                Products = category.Products?.Select(c => new ProductDto
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    ShortDescription = c.ShortDescription,
+                    Content = c.Content,
+                    Price = c.Price,
+                    Amount = c.Amount,
+                    IsAvailable = c.IsAvailable,
+                    Url = c.UrlHandle,
+                }).ToList()
             };
 
             return Ok(response);

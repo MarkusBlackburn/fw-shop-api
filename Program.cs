@@ -46,6 +46,7 @@ builder.Services.AddTransient<DbContext, AuthDbContext>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IGoogleAuthService, GoogleAuthService>();
+builder.Services.AddScoped<IApplicationAuthService, ApplicationAuthService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 
 builder.Services.Configure<GoogleAuthConfig>(builder.Configuration.GetSection("Google"));

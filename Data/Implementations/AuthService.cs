@@ -18,23 +18,41 @@ namespace fw_shop_api.Data.Implementations
     {
         private readonly AuthDbContext _context;
         private readonly IGoogleAuthService _googleAuthService;
+        private readonly IApplicationAuthService _appAuthService;
         private readonly UserManager<User> _userManager;
         private readonly IOptions<Jwt> _jwt;
 
         public AuthService(
             AuthDbContext context,
             IGoogleAuthService googleAuthService,
+            IApplicationAuthService appAuthService,
             UserManager<User> userManager,
             IOptions<Jwt> jwt)
         {
             _context = context;
             _googleAuthService = googleAuthService;
+            _appAuthService = appAuthService;
             _userManager = userManager;
             _jwt = jwt;
         }
         public async Task<BaseResponse<JwtResponseVM>> SignInWithGoogle(GoogleSignInVM model)
         {
             var response = await _googleAuthService.GoogleSignIn(model);
+
+            if (response.Errors.Any()) return new BaseResponse<JwtResponseVM>(response.ResponseMessage, response.Errors);
+
+            var jwtResponse = CreateJwtToken(response.Data);
+            var data = new JwtResponseVM
+            {
+                Token = jwtResponse
+            };
+
+            return new BaseResponse<JwtResponseVM>(data);
+        }
+
+        public async Task<BaseResponse<JwtResponseVM>> Registration(RegisterUserRequestDto model)
+        {
+            var response = await _appAuthService.Registration(model);
 
             if (response.Errors.Any()) return new BaseResponse<JwtResponseVM>(response.ResponseMessage, response.Errors);
 
@@ -63,7 +81,7 @@ namespace fw_shop_api.Data.Implementations
             return new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
         }
 
-        private List<Claim> BuildUserClaims(User user)
+        private static List<Claim> BuildUserClaims(User user)
         {
             var userClaims = new List<Claim>()
             {
