@@ -1,6 +1,7 @@
 using fw_shop_api.Data.Interfaces;
 using fw_shop_api.DTOs;
 using fw_shop_api.Models.Domain;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace fw_shop_api.Controllers
@@ -17,6 +18,7 @@ namespace fw_shop_api.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> CreateCategory(CreateCategoryRequestDto request)
         {
             var category = new Category
@@ -93,6 +95,7 @@ namespace fw_shop_api.Controllers
 
         [HttpPut]
         [Route("{id:guid}")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> UpdateCategoryById([FromRoute] Guid id, UpdateCategoryRequestDto request)
         {
             var category = new Category
@@ -118,6 +121,7 @@ namespace fw_shop_api.Controllers
 
         [HttpDelete]
         [Route("{id:guid}")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteCategoryById([FromRoute] Guid id)
         {
             var category = await _repository.DeleteCategoryById(id);

@@ -2,7 +2,6 @@ using fw_shop_api.Data.Interfaces;
 using fw_shop_api.DTOs;
 using fw_shop_api.Models.Domain;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace fw_shop_api.Controllers
 {

@@ -1,11 +1,8 @@
-using System.Linq.Expressions;
-using System.Text.Json;
 using fw_shop_api.Data.Interfaces;
 using fw_shop_api.DTOs;
 using fw_shop_api.Models.Domain;
-using fw_shop_api.Models.Util;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace fw_shop_api.Controllers
 {
@@ -23,6 +20,7 @@ namespace fw_shop_api.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> CreateNewProduct(CreateProductRequestDto request)
         {
             var product = new Product
@@ -179,6 +177,7 @@ namespace fw_shop_api.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "Administrator")]
         [Route("{id:int}")]
         public async Task<IActionResult> UpdateProductById([FromRoute] int id,UpdateProductRequestDto request)
         {
@@ -225,6 +224,7 @@ namespace fw_shop_api.Controllers
         }
 
         [HttpDelete]
+        [Authorize(Roles = "Administrator")]
         [Route("{id:int}")]
         public async Task<IActionResult> DeleteProductById([FromRoute] int id)
         {
@@ -245,52 +245,5 @@ namespace fw_shop_api.Controllers
 
             return Ok(response);
         }
-
-        /*[HttpGet]
-        public async Task<IActionResult> GetProducts([FromQuery] SearchParams searchParam)
-        {
-            List<ColumnFilter> columnFilters = [];
-            if (!String.IsNullOrEmpty(searchParam.ColumnFilters))
-            {
-                try
-                {
-                    columnFilters.AddRange(JsonSerializer.Deserialize<List<ColumnFilter>>(searchParam.ColumnFilters));
-                }
-                catch (Exception) {columnFilters = [];}
-            }
-
-            List<ColumnSorting> columnSorting = [];
-            if (!String.IsNullOrEmpty(searchParam.OrderBy))
-            {
-                try
-                {
-                    columnSorting.AddRange(JsonSerializer.Deserialize<List<ColumnSorting>>(searchParam.OrderBy));
-                }
-                catch (Exception) {columnSorting = [];}
-            }
-
-            Expression<Func<Product, bool>> filters = null;
-            var searchTerm = "";
-            if (!string.IsNullOrEmpty(searchParam.SearchTerm))
-            {
-                searchTerm = searchParam.SearchTerm.Trim().ToLower();
-                filters = x => x.Name.ToLower().Contains(searchTerm);
-            }
-
-            if (columnFilters.Count > 0)
-            {
-                var customFilter = CustomExpressionFilter<Product>.CustomFilter(columnFilters, "products");
-                filters = customFilter;
-            }
-
-            var query = products.AsQueryable().CustomQuery(filters);
-            var count = query.Count();
-            var filteredData = query.CustomPagination(searchParam.PageNumber, searchParam.PageSize).ToListAsync();
-            var pagedList = new PagedList<Product>(filteredData, count, searchParam.PageNumber, searchParam.PageSize);
-
-            if (pagedList is not null) Response.AddPaginationHeader(pagedList.MetaData);
-
-            return Ok(pagedList);
-        }*/
     }
 }
