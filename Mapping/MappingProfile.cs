@@ -1,4 +1,5 @@
 using AutoMapper;
+using fw_shop_api.DTOs;
 using fw_shop_api.Models.Domain;
 
 namespace fw_shop_api.Mapping
@@ -7,7 +8,7 @@ namespace fw_shop_api.Mapping
     {
         public MappingProfile()
         {
-            CreateMap<UserForRegistrationDto, User>()
+            CreateMap<UserForRegisterDto, User>()
                 .ForMember(u => u.UserName, opt => opt.MapFrom(x => x.Email));
         }
     }
