@@ -1,9 +1,9 @@
 using System.Text;
-using fw_shop_api.configs;
 using fw_shop_api.Data.App;
 using fw_shop_api.Data.Implementations;
 using fw_shop_api.Data.Interfaces;
 using fw_shop_api.Models.Domain;
+using fw_shop_api.Models.Util;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -18,13 +18,16 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddControllers();
 
-builder.Services.AddIdentity<User, Role>(options =>
+builder.Services.AddIdentity<User, IdentityRole>(opt =>
     {
-        options.Password.RequiredLength = 8;
-        options.Lockout.AllowedForNewUsers = true;
-        options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
-        options.Lockout.MaxFailedAccessAttempts = 3;
-        options.User.RequireUniqueEmail = true;
+        opt.Password.RequiredLength = 8;
+        opt.Password.RequireDigit = true;
+        opt.Password.RequireUppercase = true;
+        opt.Password.RequireNonAlphanumeric = true;
+        opt.User.RequireUniqueEmail = true;
+        opt.Lockout.AllowedForNewUsers = true;
+        opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+        opt.Lockout.MaxFailedAccessAttempts = 3;
     }).AddEntityFrameworkStores<AuthDbContext>().AddDefaultTokenProviders();
 
 builder.Services.Configure<DataProtectionTokenProviderOptions>(options => 
@@ -45,17 +48,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddTransient<DbContext, AuthDbContext>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
-builder.Services.AddScoped<IGoogleAuthService, GoogleAuthService>();
-builder.Services.AddScoped<IApplicationAuthService, ApplicationAuthService>();
-builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.AddScoped<JwtHandler>();
 
-builder.Services.Configure<GoogleAuthConfig>(builder.Configuration.GetSection("Google"));
-
-var jwtSection = builder.Configuration.GetSection("JWT");
-builder.Services.Configure<Jwt>(jwtSection);
-
-var appSettings = jwtSection.Get<Jwt>();
-var secret = Encoding.ASCII.GetBytes(appSettings!.Secret);
+var jwtSettings = builder.Configuration.GetSection("JWTSettings");
 
 builder.Services.AddAuthentication(options =>
     {
@@ -68,16 +64,20 @@ builder.Services.AddAuthentication(options =>
             o.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
-                    ValidIssuer = appSettings.ValidIssuer,
-                    ValidAudience = appSettings.ValidAudience,
-                    ValidateIssuerSigningKey = true,
                     ValidateAudience = true,
+                    ValidateIssuerSigningKey = true,
                     ValidateLifetime = true,
+                    ValidIssuer = jwtSettings["ValidIssuer"],
+                    ValidAudience = jwtSettings["ValidAudience"],
                     ClockSkew = TimeSpan.Zero,
                     RequireExpirationTime = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(secret)
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.GetSection("Secret").Value!))
                 };
         });
+
+/*var emailConfig = builder.Configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>();
+builder.Services.AddSingleton(emailConfig);
+builder.Services.AddScoped<IEmailSender, EmailSender>();*/
 
 var app = builder.Build();
 
