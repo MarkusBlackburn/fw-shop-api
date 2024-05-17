@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace fw_shop_api.Migrations.AuthDb
 {
     /// <inheritdoc />
-    public partial class Authrebuild : Migration
+    public partial class Addauth : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -52,6 +52,31 @@ namespace fw_shop_api.Migrations.AuthDb
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "IdentityUser",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_IdentityUser", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -165,9 +190,14 @@ namespace fw_shop_api.Migrations.AuthDb
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "8314443c-8e52-420d-87b0-c99e88f29afb", null, "Administrator", "ADMINISTRATOR" },
-                    { "a66211bb-99a5-44fc-8f66-0071f0a3a71a", null, "Viewer", "VIEWER" }
+                    { "27b9fe2e-e8bd-458a-9dcf-379993956ae3", null, "Admin", "ADMIN" },
+                    { "9fe09393-2fad-48fd-b5b2-b1335adc5599", null, "Viewer", "VIEWER" }
                 });
+
+            migrationBuilder.InsertData(
+                table: "IdentityUser",
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[] { "ec4da958-8c96-4d74-8eb5-32a64facf86d", 0, "04069222-8544-48a3-9145-4507216c68e9", "gudvinrawson@gmail.com", false, false, null, "GUDVINRAWSON@GMAIL.COM", "ADMIN", "AQAAAAIAAYagAAAAEGPX1w1IsTIY7euupg0RXorcGcWKARj7lehbed77tUJ9pxb1W4JtZysa1AhRXOzU0A==", null, false, "6191816d-0aaf-4827-a53e-17fb94ede52e", false, "Admin" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -226,6 +256,9 @@ namespace fw_shop_api.Migrations.AuthDb
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "IdentityUser");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

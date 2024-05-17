@@ -20,7 +20,7 @@ namespace fw_shop_api.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateNewProduct(CreateProductRequestDto request)
         {
             var product = new Product
@@ -177,7 +177,7 @@ namespace fw_shop_api.Controllers
         }
 
         [HttpPut]
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Admin")]
         [Route("{id:int}")]
         public async Task<IActionResult> UpdateProductById([FromRoute] int id,UpdateProductRequestDto request)
         {
@@ -224,7 +224,7 @@ namespace fw_shop_api.Controllers
         }
 
         [HttpDelete]
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Admin")]
         [Route("{id:int}")]
         public async Task<IActionResult> DeleteProductById([FromRoute] int id)
         {

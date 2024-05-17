@@ -3,7 +3,6 @@ using fw_shop_api.DTOs;
 using fw_shop_api.Models.Domain;
 using fw_shop_api.Models.Util;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 
@@ -16,14 +15,14 @@ namespace fw_shop_api.Controllers
         private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
         private readonly JwtHandler _jwtHandler;
-        private readonly IEmailSender _emailSender;
+        //private readonly IEmailSender _emailSender;
 
-        public AccountsController(UserManager<User> userManager, IMapper mapper, JwtHandler jwtHandler, IEmailSender emailSender)
+        public AccountsController(UserManager<User> userManager, IMapper mapper, JwtHandler jwtHandler /*IEmailSender emailSender*/)
         {
             _userManager = userManager;
             _mapper = mapper;
             _jwtHandler = jwtHandler;
-            _emailSender = emailSender;
+            //_emailSender = emailSender;
         }
 
         [HttpPost("Registration")]
@@ -50,7 +49,8 @@ namespace fw_shop_api.Controllers
             var callback = QueryHelpers.AddQueryString(user.ClientURI!, param);
             //var message = new Message([user.Email!], "Email Confirmation Token", callback, null);
             //await _emailSender.SendEmailAsync(message);
-            await _userManager.AddToRoleAsync(newUser, "Viewer");
+            if (newUser.Email == "gudvinrawson@gmail.com") await _userManager.AddToRoleAsync(newUser, "Admin");
+            else await _userManager.AddToRoleAsync(newUser, "Viewer");
 
             return Ok();
         }
@@ -100,9 +100,10 @@ namespace fw_shop_api.Controllers
                 newUser = await _userManager.FindByEmailAsync(payload.Email);
                 if (newUser == null)
                 {
-                    newUser = new User { Email = payload.Email, UserName = payload.Email };
+                    newUser = new User { Email = payload.Email, UserName = payload.Email, FirstName = payload.GivenName, LastName = payload.FamilyName };
                     await _userManager.CreateAsync(newUser);
-                    await _userManager.AddToRoleAsync(newUser, "Viewer");
+                    if (newUser.Email == "gudvinrawson@gmail.com") await _userManager.AddToRoleAsync(newUser, "Admin");
+                    else await _userManager.AddToRoleAsync(newUser, "Viewer");
                     await _userManager.AddLoginAsync(newUser, info);
                 }
 
