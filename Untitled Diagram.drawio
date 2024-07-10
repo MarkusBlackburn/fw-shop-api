@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2024-07-10T19:50:18.888Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36" etag="TbQ8RFBJMoydE_BkvC9e" version="24.6.4" type="github">
+<mxfile host="app.diagrams.net" modified="2024-07-10T20:07:08.332Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36" etag="KU60gYl0K04rpC8KDhRg" version="24.6.4" type="github">
   <diagram name="Page-1" id="2G2clgIktXzDvsGX44Wx">
     <mxGraphModel dx="1728" dy="915" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -133,6 +133,14 @@
         </mxCell>
         <object label="product_id&lt;br&gt;category_id" Price="" id="DIfonIXwQntuXlMAbLBC-8">
           <mxCell style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;html=1;" vertex="1" parent="DIfonIXwQntuXlMAbLBC-7">
+            <mxGeometry y="50" width="160" height="50" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="DIfonIXwQntuXlMAbLBC-10" value="Product/Order pivot" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=50;horizontalStack=0;rounded=1;fontSize=14;fontStyle=0;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;arcSize=4;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="540" y="320" width="160" height="100" as="geometry" />
+        </mxCell>
+        <object label="product_id&lt;br&gt;order_id" Price="" id="DIfonIXwQntuXlMAbLBC-11">
+          <mxCell style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;html=1;" vertex="1" parent="DIfonIXwQntuXlMAbLBC-10">
             <mxGeometry y="50" width="160" height="50" as="geometry" />
           </mxCell>
         </object>
